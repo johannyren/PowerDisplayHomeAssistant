@@ -28,9 +28,6 @@ LED       -> 3.3V
 
 ![alt text](https://github.com/johannyren/PowerDisplayHomeAssistant/blob/main/Images/Wiring_ILI9341.jpg?raw=true)
 
-<p align="left">
-  <img src="https://github.com/johannyren/PowerDisplayHomeAssistant/blob/main/Images/Wiring__WemosD1.jpg?raw=true" title="Wemos D1">
-</p>
 
 ![alt text](https://github.com/johannyren/PowerDisplayHomeAssistant/blob/main/Images/Wiring__WemosD1.jpg?raw=true)
 
