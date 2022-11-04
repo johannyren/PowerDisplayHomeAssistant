@@ -50,5 +50,7 @@ Data sources from Home Assistant are defined in settings.h, together with WiFi d
 
 Icons for Grid and Solar symbols are defined in icons.h. A few variants are available - choose the ones you prefer.
 
-    
+## Casing
+STL files are available for 3D printing a casing for the display. Two variants - one straight for putting on a wall, and one tilted, optimal for a desktop display.
+
     
