@@ -12,10 +12,26 @@
 // Enter just the base of the URL to Home Assistant (not http://)
 #define HA_HOST "<my home assistant host name or ip>"
 
+// Set to true if using https, otherwise set to false.
+#define SECURE_SERVER true
+
+// For HTTPS requests. Uncomment if using https.
+  // WiFiClientSecure client;
+
+// Important! If using https, also uncomment the line 
+//     client.setInsecure();
+// in the setup() function in PowerDisplayHomeAssist.ino
+
+
+// For HTTPS requests only. OPTIONAL - The fingerprint of the site you want to connect to.
+//#define HA_HOST_FINGERPRINT "BC 73 A5 9C 6E EE 38 43 A6 37 FC 32 CF 08 16 DC CF F1 5A 66"
+
+// For HTTP requests. Comment if using https.
+  WiFiClient client;
+
 // Your Home Assistant bearer token. https://www.home-assistant.io/docs/authentication/
 String bearerToken = "<my bearer token string goes here - check the link above to create one>";
-// OPTIONAL - The fingerprint of the site you want to connect to.
-#define HA_HOST_FINGERPRINT "<my fingerprint>"
+
 
 
 // Set up your sensors, as they are named in your Home Assistant installation
@@ -27,7 +43,7 @@ String bearerToken = "<my bearer token string goes here - check the link above t
 #define SENSOR_NORDPOOL "sensor.nordpool" // Expecting Home Assistant NordPool Integration. https://github.com/custom-components/nordpool
 
 #define SOLAR_PANELS true // Change to true if using solar panels, and add the sensor below.
-#define SENSOR_CURRENT_PRODUCTION "sensor.momentary_active_export888" // If using ESPHome HAN port reader  https://github.com/psvanstrom/esphome-p1reader
+#define SENSOR_CURRENT_PRODUCTION "sensor.momentary_active_export" // If using ESPHome HAN port reader  https://github.com/psvanstrom/esphome-p1reader
 
 
 // Home assistant
