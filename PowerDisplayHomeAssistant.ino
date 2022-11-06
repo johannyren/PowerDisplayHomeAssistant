@@ -5,7 +5,7 @@
 #include <NTPClient.h>
 #include "Free_Fonts.h" // Include the header file attached to this sketch
 #include "SPI.h"
-#include "TFT_eSPI.h"                  // // https://github.com/Bodmer/TFT_eWidget
+#include "TFT_eSPI.h"                  // https://github.com/Bodmer/TFT_eWidget
 #include <TFT_eWidget.h>               // Widget library
 #include "icons.h"
 #include "settings.h"
@@ -52,15 +52,23 @@
 #define DKGREY    0x4A49
 
 
-
 // Display
+/* Using library TFT_eSPI https://github.com/Bodmer/TFT_eWidget.
+ *  Be sure to update the file User_Setup.h in the \libraries\TFT_eSPI folder to set pin numbers. 
+ *  To match the pin numbers, use the following:
+ *  // For NodeMCU - use pin numbers in the form PIN_Dx where Dx is the NodeMCU pin designation
+    #define TFT_CS   PIN_D2  // Chip select control pin D8
+    #define TFT_DC   PIN_D4  // Data Command control pin
+    #define TFT_RST  PIN_D3  // Reset pin (could connect to NodeMCU RST, see next line)
+
+*/    
+
 // Use hardware SPI
 TFT_eSPI tft = TFT_eSPI();
 unsigned long drawTime = 0;
 WiFiUDP ntpUDP;
 
-// For HTTPS requests
-WiFiClientSecure client;
+ 
 void reconnect();
 
 String message = "";
@@ -99,10 +107,15 @@ static float gx = 0.0, gy = 0.0;
   
 void setup(void) {
 
+// For HTTPS requests only. Keep commented otherwise! 
+// If you don't need to check the fingerprint
+     client.setInsecure();
+// If you want to check the fingerprint
+    // client.setFingerprint(HA_HOST_FINGERPRINT);
+  
   pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
   Serial.begin(115200);
 
-  
 // TFT setup
   tft.begin();
   tft.setRotation(2);
@@ -140,12 +153,6 @@ void setup(void) {
   tft.println(ip);
   delay(2000);
   tft.fillScreen(bgColour);            // Clear screen
-
-  //--------
-  // If you don't need to check the fingerprint
-   client.setInsecure();
-  // If you want to check the fingerprint
-  // client.setFingerprint(HA_HOST_FINGERPRINT);
 
 }
 
@@ -316,9 +323,9 @@ void WriteCurrentPower(int xPos, int yPos, int nCurrentPower)
   tft.drawCentreString(BLANKTEXT, xPos, yPos, GFXFF);// Clear the line  
   tft.drawCentreString(currentPower + " W", xPos, yPos, GFXFF);  
   if (nCurrentPower > 0)
-     tft.pushImage(xPos-115, yPos-5, 32, 32, electrical_tower32);
+     tft.pushImage(xPos-115, yPos-5, 32, 32, electric_pole);
   else
-     tft.pushImage(xPos-115, yPos-5, 32, 32, solar_energy32);
+     tft.pushImage(xPos-115, yPos-5, 32, 32, sunny_solar32);
 }
 
 void WriteTotal(int xPos, int yPos)
@@ -385,10 +392,20 @@ DynamicJsonDocument makeGETRequest(String entity_id)
     Serial.println("Error: Entity id is null");
   }
 
-  // Opening connection to server (Use 80 as port if HTTP)
-  if (!client.connect(HA_HOST, 443))
+  // Opening connection to server (Use 8123 as port if HTTP)
+  if (SECURE_SERVER)  
   {
-    Serial.println(F("Connection failed"));
+    if (!client.connect(HA_HOST, 443))
+    {
+      Serial.println("Connection to " + String(HA_HOST) + " failed using port 443");
+    }
+  }
+  else
+  {
+    if (!client.connect(HA_HOST, 8123))
+    {
+      Serial.println("Connection to " + String(HA_HOST) + " failed failed using port 8123");
+    }    
   }
 
   // Send HTTP request
