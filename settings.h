@@ -44,7 +44,7 @@ String bearerToken = "<my bearer token string goes here - check the link above t
 
 #define SOLAR_PANELS true // Change to true if using solar panels, and add the sensor below.
 #define SENSOR_CURRENT_PRODUCTION "sensor.momentary_active_export" // If using ESPHome HAN port reader  https://github.com/psvanstrom/esphome-p1reader
-
+#define SENSOR_TIME "sensor.time" // Current local time, set up with https://www.home-assistant.io/integrations/time_date/
 
 // Home assistant
 char ssid[] = "<my ssid>";       // your network SSID (name)

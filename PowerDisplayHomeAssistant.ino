@@ -2,7 +2,6 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <WiFiUdp.h>
-#include <NTPClient.h>
 #include "Free_Fonts.h" // Include the header file attached to this sketch
 #include "SPI.h"
 #include "TFT_eSPI.h"                  // https://github.com/Bodmer/TFT_eWidget
@@ -215,8 +214,14 @@ void loop() {
   if (currentMillis - graphStarted >= graphInterval or !graphDrawn) {
     graphStarted = currentMillis;
     graphDrawn = true;
+
+    document = makeGETRequest(SENSOR_TIME);    
+    String last_changed = ExtractJSONAttribute(document,  "state"); // 20:06
+    int hours = last_changed.substring(0, 2).toInt();
+    int minutes = last_changed.substring(3, 5).toInt();
+
     document = makeGETRequest(SENSOR_NORDPOOL);  
-    PlotGraph(document);  
+    PlotGraph(document, hours, minutes);  
   }
 }
 
@@ -251,7 +256,7 @@ void CreateGraph (int xPos, int yPos, float maxPriceToday )
   }   
 }
 
-void PlotGraph (DynamicJsonDocument nordPoolDocument)
+void PlotGraph (DynamicJsonDocument nordPoolDocument, int hours, int minutes)
 {
   double lastprice = 0;
   double price;
@@ -260,7 +265,7 @@ void PlotGraph (DynamicJsonDocument nordPoolDocument)
   Serial.print("Max price today: ");
   Serial.println(maxPricetoday);
   CreateGraph (10, 128, maxPricetoday);
-  PlotTimeline(maxPricetoday);
+  PlotTimeline(maxPricetoday, hours, minutes);
   
   for (int priceCount=0;priceCount<24;priceCount++)
   {
@@ -272,15 +277,9 @@ void PlotGraph (DynamicJsonDocument nordPoolDocument)
     lastprice = AddPrice(24, price,  23,  lastprice);
 }
 
-void PlotTimeline(float maxPriceToday)
+void PlotTimeline(float maxPriceToday, int hours, int minutes)
 {
-  // Get current time, to draw a timeline
-  NTPClient timeClient(ntpUDP, "se.pool.ntp.org", 3600);
-  
-  timeClient.update();
   Serial.println("Timeline value: ");
-  double hours = timeClient.getHours();
-  double minutes = timeClient.getMinutes();
   double timeLineVal = hours + (minutes/60);
   tr2.startTrace(LTGREY);
   tr2.addPoint(timeLineVal, 0);
