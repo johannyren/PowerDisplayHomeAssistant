@@ -268,13 +268,14 @@ void PlotGraph (DynamicJsonDocument nordPoolDocument)
     lastprice = AddPrice(priceCount, price,  priceCount-1,  lastprice);
   }
   price = nordPoolDocument["attributes"]["tomorrow"][0];
-  lastprice = AddPrice(24, price,  23,  lastprice);
+  if (price > 0)
+    lastprice = AddPrice(24, price,  23,  lastprice);
 }
 
 void PlotTimeline(float maxPriceToday)
 {
   // Get current time, to draw a timeline
-  NTPClient timeClient(ntpUDP, "se.pool.ntp.org", 7200);
+  NTPClient timeClient(ntpUDP, "se.pool.ntp.org", 3600);
   
   timeClient.update();
   Serial.println("Timeline value: ");
