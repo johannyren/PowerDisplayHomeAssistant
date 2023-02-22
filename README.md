@@ -1,5 +1,8 @@
 # PowerDisplayHomeAssistant
 
+### Update: This display is now ported to ESPHome, which has many benefits over this implementation. I recommend using that instead, although it will require an ESP32 instead of an ESP8266. This implementation works but will no longer be maintained. See link: [https://github.com/johannyren/PowerDisplayESPHome]
+
+
 This is a small display that shows the current electricity consumption, together with a graph of the today's electricity price, using either NordPool or Tibber. The software pulls the data from a Home Assistant instance, so all sources must be available there.
 <p align="center">
   <img src="(https://github.com/johannyren/PowerDisplayHomeAssistant/blob/main/Images/Display1.jpg?raw=true)" width="350" title="Display">
